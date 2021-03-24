@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
 # Name of the project
-PROJECT(NewProject)
+PROJECT(Asteroids)
 
 # Is this the solution?
 # Override with `cmake -DSOL=ON ..`
