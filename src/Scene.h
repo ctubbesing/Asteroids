@@ -9,12 +9,13 @@
 
 class MatrixStack;
 class Program;
+class SpaceShip;
 //class Entity;
 
 class Scene : public std::enable_shared_from_this<Scene>
 {
 public:
-    Scene(std::string _DATA_DIR = "");
+    Scene(std::string _DATA_DIR = "../data/");
     virtual ~Scene();
 
     void init();
@@ -24,7 +25,11 @@ public:
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
-private:    
+private:
+    std::shared_ptr<SpaceShip> spaceship;
+    // std::vector<std::shared_ptr<Asteroid>> asteroids;
+    // std::vector<std::shared_ptr<Projectile>> projectiles;
+
     std::shared_ptr<Program> progSimple;
     std::shared_ptr<Program> progShapes;
 

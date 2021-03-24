@@ -20,6 +20,8 @@
 #include "MatrixStack.h"
 #include "Shape.h"
 #include "Scene.h"
+#include "Entity.h"
+#include "SpaceShip.h"
 
 using namespace std;
 
@@ -34,6 +36,8 @@ shared_ptr<Program> progSimple = NULL;
 shared_ptr<Program> progShapes = NULL;
 shared_ptr<Scene> scene = NULL;
 shared_ptr<Shape> shape = NULL;
+shared_ptr<Shape> shape1 = NULL;
+shared_ptr<Shape> shape2 = NULL;
 double t, t0;
 double tMult = 1.0;
 
@@ -118,11 +122,25 @@ static void init()
 
     // initialize sample shape
     shape = make_shared<Shape>();
-    shape->loadMesh(DATA_DIR + "marker2.obj");
-    //shape->refreshNormals();
+    shape->loadMesh(DATA_DIR + "spaceship.obj");
+    shape->refreshNormals();
     shape->setProgram(progShapes);
     shape->scale(1.0f);
     shape->init();
+
+    shape1 = make_shared<Shape>();
+    shape1->loadMesh(DATA_DIR + "spaceship_body.obj");
+    shape1->refreshNormals();
+    shape1->setProgram(progShapes);
+    shape1->scale(1.0f);
+    shape1->init();
+
+    shape2 = make_shared<Shape>();
+    shape2->loadMesh(DATA_DIR + "spaceship_fin.obj");
+    shape2->refreshNormals();
+    shape2->setProgram(progShapes);
+    shape2->scale(1.0f);
+    shape2->init();
 
     // initialize scene
     scene = make_shared<Scene>();
@@ -213,7 +231,7 @@ void render()
     progSimple->bind();
     glUniformMatrix4fv(progSimple->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
     glUniformMatrix4fv(progSimple->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
-    int cellsPerEdge = 10;
+    int cellsPerEdge = 20;
     float edgeLength = 20.0f;
     float gridSizeHalf = edgeLength / 2.0f;
     int gridNx = cellsPerEdge + 1;
@@ -236,20 +254,45 @@ void render()
     glEnd();
     progSimple->unbind();
 
-    // draw sample shape
+    // draw sample shapes
     progShapes->bind();
-    glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.5f, 0.6f);
-    glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.05f, 0.06f);
+    glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
+    glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.06f, 0.05f);
     glUniformMatrix4fv(progShapes->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
 
     MV->pushMatrix();
 
-    MV->translate(glm::vec3(-0.5f, 0.0f, -0.5f));
+    MV->translate(glm::vec3(4.0f, 0.0f, 0.0f));
 
     glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     shape->draw();
 
     MV->popMatrix();
+
+    // new version
+    MV->pushMatrix();
+
+    //MV->translate(glm::vec3(4.0f, 0.0f, 0.0f));
+
+    glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+    glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.5f, 0.6f);
+    glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.05f, 0.06f);
+    shape1->draw(); // body
+
+
+    glUniform3f(progShapes->getUniform("kd"), 0.1f, 0.3f, 0.4f);
+    glUniform3f(progShapes->getUniform("ka"), 0.01f, 0.03f, 0.04f);
+    shape2->draw(); // left fin
+
+    MV->pushMatrix();
+    MV->rotate(M_PI, 0.0f, 0.0f, 1.0f);
+    glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+    shape2->draw(); // right fin (mirror of left)
+    MV->popMatrix();
+
+    MV->popMatrix();
+
+
     progShapes->unbind();
 
     // draw scene
@@ -282,7 +325,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	// Create a windowed mode window and its OpenGL context.
-	window = glfwCreateWindow(1200, 900, "New Project", NULL, NULL);
+	window = glfwCreateWindow(1200, 900, "Asteroids", NULL, NULL);
 	if(!window) {
 		glfwTerminate();
 		return -1;
