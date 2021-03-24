@@ -146,6 +146,7 @@ static void init()
     scene = make_shared<Scene>();
     scene->setProgSimple(progSimple);
     scene->setProgShapes(progShapes);
+    scene->init();
     
     // set background color
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -296,7 +297,7 @@ void render()
     progShapes->unbind();
 
     // draw scene
-    
+    scene->draw(P, MV, t);
 
     // pop matrix stacks
     MV->popMatrix();

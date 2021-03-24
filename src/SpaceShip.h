@@ -24,6 +24,9 @@ public:
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 private:
+    glm::vec3 pos;
+    float dir;
+
     std::shared_ptr<Shape> body;
     std::shared_ptr<Shape> fin;
 };

@@ -23,5 +23,9 @@ void Scene::init()
 
 void Scene::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
 {
+    progShapes->bind();
 
+    spaceship->draw(P, MV, t);
+
+    progShapes->unbind();
 }

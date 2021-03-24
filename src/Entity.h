@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 
 class MatrixStack;
+class Program;
 
 class Entity
 {
@@ -21,6 +22,7 @@ public:
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 protected:
+    std::shared_ptr<Program> prog;
 };
 
 #endif
