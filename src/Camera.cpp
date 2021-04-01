@@ -10,7 +10,7 @@ Camera::Camera() :
 	fovy((float)(45.0*M_PI/180.0)),
 	znear(0.5f),
 	zfar(5000.0f),
-	rotations(0.0, 0.0),
+	rotations(M_PI, M_PI/2),
 	translations(0.0f, 0.0f, -20.0f),
 	rfactor(0.01f),
 	tfactor(0.001f),

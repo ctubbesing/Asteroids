@@ -94,7 +94,7 @@ static void init()
     keyToggles[(unsigned)'c'] = true;
 
     camera = make_shared<Camera>();
-    camera->setInitDistance(20.0f);
+    camera->setInitDistance(60.0f);
     
     // simple program
     progSimple = make_shared<Program>();
@@ -177,7 +177,7 @@ void render()
     glfwGetFramebufferSize(window, &width, &height);
     glViewport(0, 0, width, height);
 
-    // use the window size for camera
+    // use the window size for camera //////////////////////////////////TODO auto-zoom camera to fit screen width
     glfwGetWindowSize(window, &width, &height);
     camera->setAspect((float)width / (float)height);
 
@@ -232,27 +232,44 @@ void render()
     progSimple->bind();
     glUniformMatrix4fv(progSimple->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
     glUniformMatrix4fv(progSimple->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
-    int cellsPerEdge = 20;
-    float edgeLength = 20.0f;
-    float gridSizeHalf = edgeLength / 2.0f;
-    int gridNx = cellsPerEdge + 1;
-    int gridNz = cellsPerEdge + 1;
+
+    int xLen = 16;
+    int zLen = 9;
+    float xEdge = 10 * xLen / 2.0f;
+    float zEdge = 10 * zLen / 2.0f;
+    
+    // colory N
+    glLineWidth(5);
+    glBegin(GL_LINES);
+    glColor3f(0.0f, 0.8f, 0.5f);
+    glVertex3f(-xEdge, 0, -zEdge);
+    glVertex3f(-xEdge, 0, zEdge);
+    
+    glColor3f(0.5f, 0.0f, 0.8f);
+    glVertex3f(xEdge, 0, -zEdge);
+    glVertex3f(xEdge, 0, zEdge);
+
+    glColor3f(0.8f, 0.0f, 0.0f);
+    glVertex3f(-xEdge, 0, -zEdge);
+    glVertex3f(xEdge, 0, zEdge);
+    glEnd();
+    
+    // grid
     glLineWidth(1);
     glColor3f(0.8f, 0.8f, 0.8f);
     glBegin(GL_LINES);
-    for (int i = 0; i < gridNx; ++i) {
-        float alpha = i / (gridNx - 1.0f);
-        float x = (1.0f - alpha) * (-gridSizeHalf) + alpha * gridSizeHalf;
-        glVertex3f(x, 0, -gridSizeHalf);
-        glVertex3f(x, 0, gridSizeHalf);
+    for (int i = 0; i < xLen + 1; i++) {
+        int xPos = -xEdge + 2 * i * xEdge / xLen;
+        glVertex3f(xPos, 0.0f, -zEdge);
+        glVertex3f(xPos, 0.0f, zEdge);
     }
-    for (int i = 0; i < gridNz; ++i) {
-        float alpha = i / (gridNz - 1.0f);
-        float z = (1.0f - alpha) * (-gridSizeHalf) + alpha * gridSizeHalf;
-        glVertex3f(-gridSizeHalf, 0, z);
-        glVertex3f(gridSizeHalf, 0, z);
+    for (int i = 0; i < zLen + 1; i++) {
+        int zPos = -zEdge + 2 * i * zEdge / zLen;
+        glVertex3f(-xEdge, 0.0f, zPos);
+        glVertex3f(xEdge, 0.0f, zPos);
     }
     glEnd();
+
     progSimple->unbind();
 
     /*/ draw sample shapes
@@ -327,7 +344,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 	// Create a windowed mode window and its OpenGL context.
-	window = glfwCreateWindow(1200, 900, "Asteroids", NULL, NULL);
+	window = glfwCreateWindow(1600, 1000, "Asteroids", NULL, NULL);
 	if(!window) {
 		glfwTerminate();
 		return -1;
