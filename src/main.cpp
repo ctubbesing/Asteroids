@@ -255,7 +255,7 @@ void render()
     glEnd();
     progSimple->unbind();
 
-    // draw sample shapes
+    /*/ draw sample shapes
     progShapes->bind();
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
     glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.06f, 0.05f);
@@ -295,6 +295,7 @@ void render()
 
 
     progShapes->unbind();
+    //*/
 
     // draw scene
     scene->draw(P, MV, t);

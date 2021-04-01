@@ -2,7 +2,8 @@
 
 using namespace std;
 
-Entity::Entity()
+Entity::Entity(shared_ptr<Program> prog_) :
+    prog(prog_)
 {
 
 }

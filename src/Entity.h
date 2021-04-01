@@ -12,7 +12,8 @@ class Program;
 class Entity
 {
 public:
-    Entity();
+    Entity() {}
+    Entity(std::shared_ptr<Program> prog_);
     virtual ~Entity();
 
     void init();
@@ -26,4 +27,3 @@ protected:
 };
 
 #endif
-#pragma once

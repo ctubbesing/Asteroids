@@ -17,6 +17,7 @@ class SpaceShip : public Entity
 {
 public:
     SpaceShip();
+    SpaceShip(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
     virtual ~SpaceShip();
 
     void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
