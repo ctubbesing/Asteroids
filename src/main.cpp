@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <unordered_map>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -25,7 +26,17 @@
 
 using namespace std;
 
-bool keyToggles[256] = {false};
+enum controlKeyVal
+{
+    KEY_FORWARDS,
+    KEY_LEFT,
+    KEY_RIGHT,
+    KEY_SHOOT
+};
+
+bool controlKeys[4] = { false };
+
+bool keyToggles[256] = { false };
 
 GLFWwindow *window; // Main application window
 string RESOURCE_DIR = "";
@@ -48,9 +59,45 @@ static void error_callback(int error, const char *description)
 
 static void key_callback(GLFWwindow *window, int key, int scancode, int action, int mods)
 {
-    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+    // track control keys
+    // link W to forwards control
+    if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+        controlKeys[KEY_FORWARDS] = true;
+    }
+    else if (key == GLFW_KEY_W && action == GLFW_RELEASE) {
+        controlKeys[KEY_FORWARDS] = false;
+    }
+    // link A to left control
+    else if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+        controlKeys[KEY_LEFT] = true;
+    }
+    else if (key == GLFW_KEY_A && action == GLFW_RELEASE) {
+        controlKeys[KEY_LEFT] = false;
+    }
+    // link D to right control
+    else if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+        controlKeys[KEY_RIGHT] = true;
+    }
+    else if (key == GLFW_KEY_D && action == GLFW_RELEASE) {
+        controlKeys[KEY_RIGHT] = false;
+    }
+    // link SPACE to shoot control
+    else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+        controlKeys[KEY_SHOOT] = true;
+    }
+    else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
+        controlKeys[KEY_SHOOT] = false;
+    }
+    // ESC closes window
+    else if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, GL_TRUE);
     }
+
+    //cout << "controlKeys:" << endl;
+    //cout << "    " << "forward: " << (controlKeys[KEY_FORWARDS] ? 1 : 0) << endl;
+    //cout << "    " << "left:    " << (controlKeys[KEY_LEFT] ? 1 : 0) << endl;
+    //cout << "    " << "right:   " << (controlKeys[KEY_RIGHT] ? 1 : 0) << endl;
+    //cout << "    " << "shoot:   " << (controlKeys[KEY_SHOOT] ? 1 : 0) << endl;
 }
 
 float randFloat(float l, float h)
@@ -61,6 +108,7 @@ float randFloat(float l, float h)
 
 static void char_callback(GLFWwindow *window, unsigned int key)
 {
+    //cout << (char)key << endl;
     keyToggles[key] = !keyToggles[key];
     switch (key) {}
 }
@@ -314,7 +362,8 @@ void render()
     progShapes->unbind();
     //*/
 
-    // draw scene
+    // update & draw scene
+    //scene->update(t, controlKeys);
     scene->draw(P, MV, t);
 
     // pop matrix stacks
