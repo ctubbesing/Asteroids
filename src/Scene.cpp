@@ -21,6 +21,16 @@ void Scene::init()
     spaceship = make_shared<SpaceShip>(progShapes, DATA_DIR);
 }
 
+void Scene::update(double t, bool* controlKeys)
+{
+    // update spaceship
+    spaceship->update(t, controlKeys);
+
+    // update asteroids
+
+    // update particles?
+}
+
 void Scene::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
 {
     progShapes->bind();

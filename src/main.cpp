@@ -363,7 +363,7 @@ void render()
     //*/
 
     // update & draw scene
-    //scene->update(t, controlKeys);
+    scene->update(t, controlKeys);
     scene->draw(P, MV, t);
 
     // pop matrix stacks

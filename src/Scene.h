@@ -19,6 +19,7 @@ public:
     virtual ~Scene();
 
     void init();
+    void update(double t, bool* controlKeys);
     
     void setProgSimple(std::shared_ptr<Program> prog) { progSimple = prog; }
     void setProgShapes(std::shared_ptr<Program> prog) { progShapes = prog; }

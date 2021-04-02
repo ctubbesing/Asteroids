@@ -21,12 +21,27 @@ public:
     virtual ~SpaceShip();
 
     void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
+    void update(double t, bool* controlKeys);
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
+
+    enum controlKeyVal
+    {
+        KEY_FORWARDS,
+        KEY_LEFT,
+        KEY_RIGHT,
+        KEY_SHOOT
+    };
 
 private:
     glm::vec3 pos;
     float dir;
+    glm::vec3 v;
+    float vMax;
+    float a;
+    float rotSpeed; // seconds per rotation
+    float drag;
+    double t_old;
 
     std::shared_ptr<Shape> body;
     std::shared_ptr<Shape> fin;

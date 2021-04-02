@@ -7,6 +7,7 @@
 #define GLM_FORCE_RADIANS
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 
 using namespace std;
 
@@ -78,6 +79,12 @@ void MatrixStack::rotate(float angle, float x, float y, float z)
 {
 	rotate(angle, glm::vec3(x, y, z));
 }
+
+//void MatrixStack::rotate(const glm::vec3 &dir, const glm::vec3 &up)
+//{
+//    glm::mat4 &top = mstack->top();
+//    top *= glm::orientation(dir, up);
+//}
 
 void MatrixStack::multMatrix(const glm::mat4 &matrix)
 {
