@@ -84,6 +84,7 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
     // link SPACE to shoot control
     else if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
         controlKeys[KEY_SHOOT] = true;
+        //cout << "BAD" << endl;
     }
     else if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE) {
         controlKeys[KEY_SHOOT] = false;
@@ -142,7 +143,7 @@ static void init()
     keyToggles[(unsigned)'c'] = true;
 
     camera = make_shared<Camera>();
-    camera->setInitDistance(60.0f);
+    camera->setInitDistance(125.0f);
     
     // simple program
     progSimple = make_shared<Program>();

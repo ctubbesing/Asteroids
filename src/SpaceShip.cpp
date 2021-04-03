@@ -32,8 +32,8 @@ SpaceShip::SpaceShip(shared_ptr<Program> progShapes, string DATA_DIR) :
     vMax(10.0f),
     dir(0.0f),
     rotSpeed(2*M_PI / 3), // 3 seconds per rotation
-    a(4.0f),
-    drag(1.0f),
+    a(15.0f),
+    drag(0.5f),
     t_old(0.0)
 {
     // initialize body & fins
@@ -64,6 +64,12 @@ void SpaceShip::init(shared_ptr<Program> progShapes, string DATA_DIR)
 
 void SpaceShip::update(double t, bool* controlKeys)
 {
+    //cout << "controlKeys:" << endl;
+    //cout << "    " << "forward: " << (controlKeys[KEY_FORWARDS] ? 1 : 0) << endl;
+    //cout << "    " << "left:    " << (controlKeys[KEY_LEFT] ? 1 : 0) << endl;
+    //cout << "    " << "right:   " << (controlKeys[KEY_RIGHT] ? 1 : 0) << endl;
+    //cout << "    " << "shoot:   " << (controlKeys[KEY_SHOOT] ? 1 : 0) << endl;
+
     float dt = t - t_old;
     t_old = t;
 
@@ -74,28 +80,52 @@ void SpaceShip::update(double t, bool* controlKeys)
     if (controlKeys[KEY_RIGHT]) {
         dir -= rotSpeed * dt;
     }
+    //cout << "dir: " << dir << endl;
 
     // update velocity
+    float speedSq = v.x * v.x + v.z * v.z;
+    //cout << "speed^2: " << speedSq << endl;
+    float maxSpeed = 500.0f;
+    float minSpeed = 0.5f;
     if (controlKeys[KEY_FORWARDS]) {
-        v.x += sin(dir) * a * dt; ////////////////////////// change this to have a max v
-        v.z += cos(dir) * a * dt; ////////////////////////// change this to have a max v
+        // speed up
+        if (speedSq < maxSpeed) {
+            v.x += sin(dir) * a * dt;
+            v.z += cos(dir) * a * dt;
+        }
 
         //v.x = CLAMP(v.x + (dir) * a * dt, vMax, 0.0f);
         //v.z = CLAMP(v.z + (dir) * a * dt, vMax, 0.0f);
     }
     else {
-        //v.x -= sin(dir) * drag * dt; ////////////////////////// change this to have a max v
-        //v.z -= cos(dir) * drag * dt; ////////////////////////// change this to have a max v
-
-        v.x = CLAMP(v.x - (dir) * a * dt, vMax, 0.0f);
-        v.z = CLAMP(v.z - (dir) * a * dt, vMax, 0.0f);
-
-        ///////////////////////////////////////////////////////////////so gotta subtract from the negative direction of the ship's velocity
-        //////////////////////////////////////////////////////////maybe just v -= drag * v; if(magnitude(v) < smallVal) v = 0;?
+        // apply drag
+        if (speedSq < minSpeed) {
+            v.x = 0.0f;
+            v.z = 0.0f;
+        }
+        else {
+            v -= dt * drag * v;
+        }
     }
-    cout << "v = (" << v.x << ", " << v.y << ")" << endl;
+    //cout << "v = (" << v.x << ", " << v.y << ")" << endl;
+
     // update position
     pos += v * dt;
+    if (pos.x < -80.0f) {
+        pos.x += 160.0f;
+    }
+    else if (pos.x > 80.0f) {
+        pos.x -= 160.f;
+    }
+    if (pos.z < -45.0f) {
+        pos.z += 90.0f;
+    }
+    else if (pos.z > 45.0f) {
+        pos.z -= 90.0f;
+    }
+    
+
+    //cout << endl;
 }
 
 void SpaceShip::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)

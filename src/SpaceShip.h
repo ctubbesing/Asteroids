@@ -40,7 +40,7 @@ private:
     float vMax;
     float a;
     float rotSpeed; // seconds per rotation
-    float drag;
+    float drag;     // speed lost per second
     double t_old;
 
     std::shared_ptr<Shape> body;
