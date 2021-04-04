@@ -43,6 +43,8 @@ private:
     float drag;     // speed lost per second
     double t_old;
 
+    bool thrustersOn;
+
     std::shared_ptr<Shape> body;
     std::shared_ptr<Shape> fin;
 };

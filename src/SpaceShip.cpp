@@ -17,6 +17,12 @@
 
 using namespace std;
 
+float randFloat(float l, float h)
+{
+    float r = rand() / (float)RAND_MAX;
+    return (1.0f - r) * l + r * h;
+}
+
 SpaceShip::SpaceShip() :
     pos(-3.0f, 0.0f, 0.0f),
     //pos(0.0f),
@@ -29,12 +35,13 @@ SpaceShip::SpaceShip(shared_ptr<Program> progShapes, string DATA_DIR) :
     Entity(progShapes),
     pos(0.0f, 0.0f, 0.0f),
     v(0.0f, 0.0f, 0.0f),
-    vMax(10.0f),
+    vMax(500.0f),
     dir(0.0f),
-    rotSpeed(2*M_PI / 3), // 3 seconds per rotation
-    a(15.0f),
-    drag(0.5f),
-    t_old(0.0)
+    rotSpeed(2*M_PI / 2), // 2 seconds per rotation
+    a(50.0f),//15.0f),
+    drag(1.0f),
+    t_old(0.0),
+    thrustersOn(false)
 {
     // initialize body & fins
     body = make_shared<Shape>();
@@ -73,6 +80,9 @@ void SpaceShip::update(double t, bool* controlKeys)
     float dt = t - t_old;
     t_old = t;
 
+    // update thrusters
+    thrustersOn = controlKeys[KEY_FORWARDS];
+
     // update orientation
     if (controlKeys[KEY_LEFT]) {
         dir += rotSpeed * dt;
@@ -80,34 +90,26 @@ void SpaceShip::update(double t, bool* controlKeys)
     if (controlKeys[KEY_RIGHT]) {
         dir -= rotSpeed * dt;
     }
-    //cout << "dir: " << dir << endl;
 
     // update velocity
     float speedSq = v.x * v.x + v.z * v.z;
-    //cout << "speed^2: " << speedSq << endl;
     float maxSpeed = 500.0f;
     float minSpeed = 0.5f;
-    if (controlKeys[KEY_FORWARDS]) {
-        // speed up
-        if (speedSq < maxSpeed) {
-            v.x += sin(dir) * a * dt;
-            v.z += cos(dir) * a * dt;
-        }
 
-        //v.x = CLAMP(v.x + (dir) * a * dt, vMax, 0.0f);
-        //v.z = CLAMP(v.z + (dir) * a * dt, vMax, 0.0f);
+    // apply drag //////////////////////////// !! prolly should apply drag and thrust individually to x & z
+    if (speedSq < minSpeed) {
+        v.x = 0.0f;
+        v.z = 0.0f;
     }
     else {
-        // apply drag
-        if (speedSq < minSpeed) {
-            v.x = 0.0f;
-            v.z = 0.0f;
-        }
-        else {
-            v -= dt * drag * v;
-        }
+        v -= dt * drag * v;
     }
-    //cout << "v = (" << v.x << ", " << v.y << ")" << endl;
+
+    // apply thrust
+    if (controlKeys[KEY_FORWARDS] && speedSq < vMax) {
+        v.x += sin(dir) * a * dt;
+        v.z += cos(dir) * a * dt;
+    }
 
     // update position
     pos += v * dt;
@@ -123,9 +125,6 @@ void SpaceShip::update(double t, bool* controlKeys)
     else if (pos.z > 45.0f) {
         pos.z -= 90.0f;
     }
-    
-
-    //cout << endl;
 }
 
 void SpaceShip::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
@@ -138,10 +137,11 @@ void SpaceShip::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack
     MV->rotate(dir, 0.0f, 1.0f, 0.0f);
     MV->translate(0.0f, 0.0f, -2.0f);
 
+    MV->pushMatrix();
     // draw body
-    glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     glUniform3f(prog->getUniform("kd"), 0.2f, 0.5f, 0.6f);
     glUniform3f(prog->getUniform("ka"), 0.02f, 0.05f, 0.06f);
+    glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     body->draw();
 
     //draw fins
@@ -156,4 +156,31 @@ void SpaceShip::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack
     MV->popMatrix();
 
     MV->popMatrix();
+
+    // draw thrusters (just a recolor of the same shape)
+    if (thrustersOn) {
+        MV->pushMatrix();
+
+        MV->rotate(M_PI, glm::vec3(0.0f, 1.0f, 0.0f));
+        MV->translate(0.0f, 0.0f, -1.5f);
+        MV->scale(0.5f);
+
+        glUniform3f(prog->getUniform("kd"), 0.8f, randFloat(0.0f, 0.8f), 0.0f);
+        glUniform3f(prog->getUniform("ka"), 0.08f, randFloat(0.0f, 0.08f), 0.0f);
+        glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+        body->draw();
+
+        glUniform3f(prog->getUniform("kd"), 0.8f, randFloat(0.0f, 0.8f), 0.0f);
+        glUniform3f(prog->getUniform("ka"), 0.08f, randFloat(0.0f, 0.08f), 0.0f);
+        glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+        fin->draw();
+
+        MV->rotate(M_PI, 0.0f, 0.0f, 1.0f);
+        glUniform3f(prog->getUniform("kd"), 0.8f, randFloat(0.0f, 0.8f), 0.0f);
+        glUniform3f(prog->getUniform("ka"), 0.08f, randFloat(0.0f, 0.08f), 0.0f);
+        glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+        fin->draw();
+
+        MV->popMatrix();
+    }
 }
