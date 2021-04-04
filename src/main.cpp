@@ -101,11 +101,11 @@ static void key_callback(GLFWwindow *window, int key, int scancode, int action, 
     //cout << "    " << "shoot:   " << (controlKeys[KEY_SHOOT] ? 1 : 0) << endl;
 }
 
-float randFloat(float l, float h)
-{
-    float r = rand() / (float)RAND_MAX;
-    return (1.0f - r) * l + r * h;
-}
+//float randFloat(float l, float h)
+//{
+//    float r = rand() / (float)RAND_MAX;
+//    return (1.0f - r) * l + r * h;
+//}
 
 static void char_callback(GLFWwindow *window, unsigned int key)
 {
@@ -198,7 +198,8 @@ static void init()
     scene->init();
     
     // set background color
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     // enable z-buffer test
     glEnable(GL_DEPTH_TEST);
     // enable alpha blending
@@ -216,7 +217,7 @@ void render()
     // update time
     double t1 = glfwGetTime();
     float dt = tMult * (t1 - t0);
-    if (!keyToggles[(unsigned)' ']) {
+    if (!keyToggles[(unsigned)'t']) {
         t += dt;
     }
     t0 = t1;
@@ -254,11 +255,10 @@ void render()
     MV->pushMatrix();
     camera->applyViewMatrix(MV);
     
-    // draw axes
+    /*/ draw axes
     progSimple->bind();
     glUniformMatrix4fv(progSimple->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
     MV->pushMatrix();
-    //MV->translate(glm::vec3(0.0f, 10.0f, 0.0f));
     glUniformMatrix4fv(progSimple->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     float len = 1.0f;
     glLineWidth(2);
@@ -276,6 +276,7 @@ void render()
     glLineWidth(1);
     MV->popMatrix();
     progSimple->unbind();
+    //*/
 
     // Draw grid
     progSimple->bind();
@@ -287,32 +288,44 @@ void render()
     float xEdge = 10 * xLen / 2.0f;
     float zEdge = 10 * zLen / 2.0f;
     
-    // colory N
+    /*/ colory N
     glLineWidth(5);
-    glBegin(GL_LINES);
-    glColor3f(0.0f, 0.8f, 0.5f);
-    glVertex3f(-xEdge, 0, -zEdge);
-    glVertex3f(-xEdge, 0, zEdge);
+    glbegin(gl_lines);
+    glcolor3f(0.0f, 0.8f, 0.5f);
+    glvertex3f(-xedge, 0, -zedge);
+    glvertex3f(-xedge, 0, zedge);
     
-    glColor3f(0.5f, 0.0f, 0.8f);
-    glVertex3f(xEdge, 0, -zEdge);
-    glVertex3f(xEdge, 0, zEdge);
+    glcolor3f(0.5f, 0.0f, 0.8f);
+    glvertex3f(xedge, 0, -zedge);
+    glvertex3f(xedge, 0, zedge);
 
-    glColor3f(0.8f, 0.0f, 0.0f);
-    glVertex3f(-xEdge, 0, -zEdge);
-    glVertex3f(xEdge, 0, zEdge);
-    glEnd();
+    glcolor3f(0.8f, 0.0f, 0.0f);
+    glvertex3f(-xedge, 0, -zedge);
+    glvertex3f(xedge, 0, zedge);
+    glend();
+    //*/
     
+    // border
+    glLineWidth(3);
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glBegin(GL_LINE_STRIP);
+    glVertex3f(-xEdge, 0.0f, -zEdge);
+    glVertex3f(-xEdge, 0.0f, zEdge);
+    glVertex3f(xEdge, 0.0f, zEdge);
+    glVertex3f(xEdge, 0.0f, -zEdge);
+    glVertex3f(-xEdge, 0.0f, -zEdge);
+    glEnd();
+
     // grid
     glLineWidth(1);
-    glColor3f(0.8f, 0.8f, 0.8f);
+    glColor3f(0.2f, 0.2f, 0.2f);
     glBegin(GL_LINES);
-    for (int i = 0; i < xLen + 1; i++) {
+    for (int i = 1; i < xLen; i++) {
         int xPos = -xEdge + 2 * i * xEdge / xLen;
         glVertex3f(xPos, 0.0f, -zEdge);
         glVertex3f(xPos, 0.0f, zEdge);
     }
-    for (int i = 0; i < zLen + 1; i++) {
+    for (int i = 1; i < zLen; i++) {
         int zPos = -zEdge + 2 * i * zEdge / zLen;
         glVertex3f(-xEdge, 0.0f, zPos);
         glVertex3f(xEdge, 0.0f, zPos);
