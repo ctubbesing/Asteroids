@@ -4,14 +4,9 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SpaceShip.h"
-#include "Entity.h"
 #include "Program.h"
 #include "Shape.h"
 #include "MatrixStack.h"
-
-#ifndef M_PI
-#define M_PI (float)3.14159265358979323846
-#endif
 
 #define CLAMP(X, MAX, MIN) (X > MAX ? MAX : (X < MIN ? MIN : X))
 
@@ -53,10 +48,10 @@ SpaceShip::~SpaceShip()
 
 }
 
-void SpaceShip::init(shared_ptr<Program> progShapes, string DATA_DIR)
-{
-    
-}
+//void SpaceShip::init(shared_ptr<Program> progShapes, string DATA_DIR)
+//{
+//    
+//}
 
 void SpaceShip::update(double t, bool* controlKeys)
 {

@@ -185,7 +185,7 @@ static void init()
     shape1->init();
 
     shape2 = make_shared<Shape>();
-    shape2->loadMesh(DATA_DIR + "spaceship_fin.obj");
+    shape2->loadMesh(DATA_DIR + "projectile.obj");
     shape2->refreshNormals();
     shape2->setProgram(progShapes);
     shape2->scale(1.0f);
@@ -255,7 +255,7 @@ void render()
     MV->pushMatrix();
     camera->applyViewMatrix(MV);
     
-    /*/ draw axes
+    //*/ draw axes
     progSimple->bind();
     glUniformMatrix4fv(progSimple->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
     MV->pushMatrix();
@@ -334,7 +334,7 @@ void render()
 
     progSimple->unbind();
 
-    /*/ draw sample shapes
+    //*/ draw sample shapes
     progShapes->bind();
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
     glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.06f, 0.05f);
@@ -354,21 +354,23 @@ void render()
 
     //MV->translate(glm::vec3(4.0f, 0.0f, 0.0f));
 
-    glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.5f, 0.6f);
     glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.05f, 0.06f);
+    glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
     shape1->draw(); // body
 
-
-    glUniform3f(progShapes->getUniform("kd"), 0.1f, 0.3f, 0.4f);
-    glUniform3f(progShapes->getUniform("ka"), 0.01f, 0.03f, 0.04f);
-    shape2->draw(); // left fin
-
-    MV->pushMatrix();
-    MV->rotate(M_PI, 0.0f, 0.0f, 1.0f);
+    MV->translate(glm::vec3(0.0f, 0.0f, 6.5f));
+    //MV->rotate(M_PI / 4, glm::vec3(0.0f, 0.0f, 1.0f));
+    glUniform3f(progShapes->getUniform("kd"), 0.7f, 0.0f, 0.0f);
+    glUniform3f(progShapes->getUniform("ka"), 0.07f, 0.0f, 0.0f);
     glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
-    shape2->draw(); // right fin (mirror of left)
-    MV->popMatrix();
+    shape2->draw(); // projectile
+
+    //MV->pushMatrix();
+    //MV->rotate(M_PI, 0.0f, 0.0f, 1.0f);
+    //glUniformMatrix4fv(progShapes->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+    //shape2->draw(); // right fin (mirror of left)
+    //MV->popMatrix();
 
     MV->popMatrix();
 

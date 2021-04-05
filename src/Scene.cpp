@@ -26,6 +26,8 @@ void Scene::update(double t, bool* controlKeys)
     // update spaceship
     spaceship->update(t, controlKeys);
 
+    // update projectiles
+
     // update asteroids
 
     // update particles?

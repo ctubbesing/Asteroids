@@ -10,6 +10,7 @@
 class MatrixStack;
 class Program;
 class SpaceShip;
+class Projectile;
 //class Entity;
 
 class Scene : public std::enable_shared_from_this<Scene>
@@ -28,8 +29,8 @@ public:
 
 private:
     std::shared_ptr<SpaceShip> spaceship;
+     std::vector<std::shared_ptr<Projectile>> projectiles;
     // std::vector<std::shared_ptr<Asteroid>> asteroids;
-    // std::vector<std::shared_ptr<Projectile>> projectiles;
 
     std::shared_ptr<Program> progSimple;
     std::shared_ptr<Program> progShapes;

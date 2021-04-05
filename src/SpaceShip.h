@@ -20,7 +20,7 @@ public:
     SpaceShip(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
     virtual ~SpaceShip();
 
-    void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
+    //void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
     void update(double t, bool* controlKeys);
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
@@ -54,4 +54,3 @@ private:
 };
 
 #endif
-#pragma once
