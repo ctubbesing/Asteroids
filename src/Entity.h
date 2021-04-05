@@ -14,6 +14,7 @@ class Entity
 public:
     Entity() {}
     Entity(std::shared_ptr<Program> prog_);
+    Entity(std::shared_ptr<Program> prog_, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_); /////////////////////maybe do t_old too idk
     virtual ~Entity();
 
     void init();
@@ -23,6 +24,13 @@ public:
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 protected:
+    glm::vec3 pos;
+    float dir;
+    glm::vec3 v;
+    float rotSpeed; // seconds per rotation
+
+    double t_old;
+
     std::shared_ptr<Program> prog;
 };
 

@@ -23,25 +23,14 @@ float randFloat(float l, float h)
     return (1.0f - r) * l + r * h;
 }
 
-SpaceShip::SpaceShip() :
-    pos(-3.0f, 0.0f, 0.0f),
-    //pos(0.0f),
-    dir(0.0f)
-{
-
-}
-
 SpaceShip::SpaceShip(shared_ptr<Program> progShapes, string DATA_DIR) :
-    Entity(progShapes),
-    pos(0.0f, 0.0f, 0.0f),
-    v(0.0f, 0.0f, 0.0f),
+    Entity(progShapes, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f),//////////////////////t_old? // rotSpeed = 2*pi / secsPerRotation
     vMax(1000.0f),
-    dir(0.0f),
-    rotSpeed(2*M_PI / 2), // 2 seconds per rotation
     a(50.0f),//15.0f),
     drag(1.0f),
-    t_old(0.0),
-    thrustersOn(false)
+    //t_old(0.0),
+    thrustersOn(false),
+    triggerPressed(false)
 {
     // initialize body & fins
     body = make_shared<Shape>();
