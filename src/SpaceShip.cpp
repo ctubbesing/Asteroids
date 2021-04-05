@@ -35,7 +35,7 @@ SpaceShip::SpaceShip(shared_ptr<Program> progShapes, string DATA_DIR) :
     Entity(progShapes),
     pos(0.0f, 0.0f, 0.0f),
     v(0.0f, 0.0f, 0.0f),
-    vMax(500.0f),
+    vMax(1000.0f),
     dir(0.0f),
     rotSpeed(2*M_PI / 2), // 2 seconds per rotation
     a(50.0f),//15.0f),
@@ -93,10 +93,9 @@ void SpaceShip::update(double t, bool* controlKeys)
 
     // update velocity
     float speedSq = v.x * v.x + v.z * v.z;
-    float maxSpeed = 500.0f;
     float minSpeed = 0.5f;
 
-    // apply drag //////////////////////////// !! prolly should apply drag and thrust individually to x & z
+    // apply drag
     if (speedSq < minSpeed) {
         v.x = 0.0f;
         v.z = 0.0f;
