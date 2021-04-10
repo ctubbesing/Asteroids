@@ -10,8 +10,8 @@
 
 using namespace std;
 
-Projectile::Projectile(std::shared_ptr<Program> progShapes, std::string DATA_DIR, glm::vec3 pos_, float dir_, glm::vec3 v_) : //////prolly won't want to pass in v anyways
-    Entity(progShapes, pos_, dir_, v_, 2 * M_PI / 0.5f),
+Projectile::Projectile(std::shared_ptr<Program> prog_, std::string& DATA_DIR_, glm::vec3 pos_, float dir_, glm::vec3 v_, double t) : //////prolly won't want to pass in v anyways
+    Entity(prog_, DATA_DIR_, pos_, dir_, v_, 2 * M_PI / 0.5f, t),
     age(0.0f),
     lifespan(5.0f)
 {
@@ -36,10 +36,10 @@ void Projectile::update(double t)
 
     // update age
     age += dt;
-    if (age > lifespan) {
-        kill();
-        return;
-    }
+    //if (age > lifespan) {
+    //    kill();
+    //    return;
+    //}
 
     // update position
     pos += v * dt;
@@ -57,7 +57,25 @@ void Projectile::update(double t)
     }
 }
 
+bool Projectile::isAlive()
+{
+    return (age < lifespan);
+}
+
 void Projectile::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
 {
+    glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
 
+    MV->pushMatrix();
+
+    MV->translate(pos);
+    MV->rotate(dir, 0.0f, 1.0f, 0.0f);
+    //MV->translate(0.0f, 0.0f, -2.0f);
+
+    glUniform3f(prog->getUniform("kd"), 0.7f, 0.0f, 0.0f);
+    glUniform3f(prog->getUniform("ka"), 0.07f, 0.0f, 0.0f);
+    glUniformMatrix4fv(prog->getUniform("MV"), 1, GL_FALSE, glm::value_ptr(MV->topMatrix()));
+    shape->draw();
+
+    MV->popMatrix();
 }

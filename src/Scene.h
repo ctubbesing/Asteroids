@@ -3,6 +3,7 @@
 #define SCENE_H
 
 #include <vector>
+#include <list>
 #include <memory>
 
 #include <glm/glm.hpp>
@@ -25,11 +26,13 @@ public:
     void setProgSimple(std::shared_ptr<Program> prog) { progSimple = prog; }
     void setProgShapes(std::shared_ptr<Program> prog) { progShapes = prog; }
 
+    void addProjectile(std::shared_ptr<Projectile> p) { projectiles.push_back(p); }
+
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 private:
     std::shared_ptr<SpaceShip> spaceship;
-     std::vector<std::shared_ptr<Projectile>> projectiles;
+    std::list<std::shared_ptr<Projectile>> projectiles;
     // std::vector<std::shared_ptr<Asteroid>> asteroids;
 
     std::shared_ptr<Program> progSimple;

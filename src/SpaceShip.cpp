@@ -4,9 +4,11 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "SpaceShip.h"
+#include "MatrixStack.h"
 #include "Program.h"
 #include "Shape.h"
-#include "MatrixStack.h"
+#include "Scene.h"
+#include "Projectile.h"
 
 #define CLAMP(X, MAX, MIN) (X > MAX ? MAX : (X < MIN ? MIN : X))
 
@@ -18,15 +20,19 @@ float randFloat(float l, float h)
     return (1.0f - r) * l + r * h;
 }
 
-SpaceShip::SpaceShip(shared_ptr<Program> progShapes, string DATA_DIR) :
-    Entity(progShapes, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f),//////////////////////t_old? // rotSpeed = 2*pi / secsPerRotation
+SpaceShip::SpaceShip(shared_ptr<Scene> _scene, shared_ptr<Program> prog_, string& DATA_DIR_, double t) :
+    Entity(prog_, DATA_DIR_, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f, t),//////////////////////t_old? // rotSpeed = 2*pi / secsPerRotation
     vMax(1000.0f),
     a(50.0f),//15.0f),
     drag(1.0f),
     //t_old(0.0),
     thrustersOn(false),
-    triggerPressed(false)
+    triggerPressed(false),
+    cooldownDuration(1.0f),
+    timeLeft(0.0f)
 {
+    setScene(_scene);
+
     // initialize body & fins
     body = make_shared<Shape>();
     body->loadMesh(DATA_DIR + "spaceship_body.obj");
@@ -63,6 +69,18 @@ void SpaceShip::update(double t, bool* controlKeys)
 
     float dt = t - t_old;
     t_old = t;
+
+    // fire projectile
+    if (controlKeys[KEY_SHOOT]) {
+        timeLeft -= dt;
+        if (timeLeft < 0.0f) {
+            fire();
+            timeLeft = cooldownDuration;
+        }
+    }
+    else {
+        timeLeft = 0.0f;
+    }
 
     // update thrusters
     thrustersOn = controlKeys[KEY_FORWARDS];
@@ -108,6 +126,14 @@ void SpaceShip::update(double t, bool* controlKeys)
     else if (pos.z > 45.0f) {
         pos.z -= 90.0f;
     }
+}
+
+void SpaceShip::fire()
+{
+    cout << "fire()" << endl;
+    shared_ptr<Projectile> proj = make_shared<Projectile>(prog, DATA_DIR, pos, dir, v, t_old);
+
+    scene->addProjectile(proj);
 }
 
 void SpaceShip::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)

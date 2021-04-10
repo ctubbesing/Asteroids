@@ -12,12 +12,13 @@
 class MatrixStack;
 class Program;
 class Shape;
+class Scene;
 
 class SpaceShip : public Entity
 {
 public:
     SpaceShip() {}
-    SpaceShip(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
+    SpaceShip(std::shared_ptr<Scene> _scene, std::shared_ptr<Program> prog_, std::string& DATA_DIR_, double t);
     virtual ~SpaceShip();
 
     //void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
@@ -46,6 +47,8 @@ private:
 
     bool thrustersOn;
     bool triggerPressed;
+    float cooldownDuration;
+    float timeLeft;
 
     void fire();
 
