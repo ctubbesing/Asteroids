@@ -13,13 +13,14 @@ Entity::Entity(shared_ptr<Program> prog_) :
 
 }
 
-Entity::Entity(shared_ptr<Program> prog_, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_) :
+Entity::Entity(shared_ptr<Program> prog_, string& DATA_DIR_, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_, double t_old_) :
     prog(prog_),
+    DATA_DIR(DATA_DIR_),
     pos(pos_),
     dir(dir_),
     v(v_),
     rotSpeed(rotSpeed_),
-    t_old(0.0)//////////////////////////////// t_old too?
+    t_old(t_old_)
 {
 
 }
@@ -29,9 +30,9 @@ Entity::~Entity()
 
 }
 
-void Entity::init()
+void Entity::setScene(shared_ptr<Scene> _scene)
 {
-
+    scene = _scene;
 }
 
 void Entity::kill()

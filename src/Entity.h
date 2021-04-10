@@ -3,6 +3,7 @@
 #define ENTITY_H
 
 #include <memory>
+#include <string>
 
 #include <glm/glm.hpp>
 
@@ -12,16 +13,17 @@
 
 class MatrixStack;
 class Program;
+class Scene;
 
 class Entity
 {
 public:
     Entity() {}
     Entity(std::shared_ptr<Program> prog_);
-    Entity(std::shared_ptr<Program> prog_, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_); /////////////////////maybe do t_old too idk
+    Entity(std::shared_ptr<Program> prog_, std::string& _DATA_DIR, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_, double t_old_);
     virtual ~Entity();
 
-    void init();
+    void setScene(std::shared_ptr<Scene> _scene);
 
     void kill();
 
@@ -35,7 +37,9 @@ protected:
 
     double t_old;
 
+    std::shared_ptr<Scene> scene;
     std::shared_ptr<Program> prog;
+    std::string DATA_DIR;
 };
 
 #endif
