@@ -255,7 +255,7 @@ void render()
     MV->pushMatrix();
     camera->applyViewMatrix(MV);
     
-    //*/ draw axes
+    /*/ draw axes
     progSimple->bind();
     glUniformMatrix4fv(progSimple->getUniform("P"), 1, GL_FALSE, glm::value_ptr(P->topMatrix()));
     MV->pushMatrix();
@@ -334,7 +334,7 @@ void render()
 
     progSimple->unbind();
 
-    //*/ draw sample shapes
+    /*/ draw sample shapes
     progShapes->bind();
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
     glUniform3f(progShapes->getUniform("ka"), 0.02f, 0.06f, 0.05f);
