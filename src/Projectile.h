@@ -17,16 +17,16 @@ class Projectile : public Entity
 {
 public:
     Projectile() {}
-    Projectile(std::shared_ptr<Program> prog_, std::string& DATA_DIR_, glm::vec3 pos_, float dir_, double t, float speed);
+    Projectile(std::shared_ptr<Program> prog_, std::string& DATA_DIR_, glm::vec3 pos_, float dir_, double t);
     virtual ~Projectile();
 
-    //void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
     void update(double t);
     bool isAlive();
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 private:
+    float speed;
     float age;
     float lifespan;
 

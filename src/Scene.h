@@ -12,7 +12,6 @@ class MatrixStack;
 class Program;
 class SpaceShip;
 class Projectile;
-//class Entity;
 
 class Scene : public std::enable_shared_from_this<Scene>
 {
@@ -42,4 +41,3 @@ private:
 };
 
 #endif
-#pragma once

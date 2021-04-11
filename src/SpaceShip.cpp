@@ -28,8 +28,7 @@ SpaceShip::SpaceShip(shared_ptr<Scene> _scene, shared_ptr<Program> prog_, string
     thrustersOn(false),
     triggerPressed(false),
     cooldownDuration(0.5f),
-    timeLeft(0.0f),
-    projSpeed(100.0f) // maybe just put this in the Projectile constructor
+    timeLeft(0.0f)
 {
     setScene(_scene);
 
@@ -54,19 +53,8 @@ SpaceShip::~SpaceShip()
 
 }
 
-//void SpaceShip::init(shared_ptr<Program> progShapes, string DATA_DIR)
-//{
-//    
-//}
-
 void SpaceShip::update(double t, bool* controlKeys)
 {
-    //cout << "controlKeys:" << endl;
-    //cout << "    " << "forward: " << (controlKeys[KEY_FORWARDS] ? 1 : 0) << endl;
-    //cout << "    " << "left:    " << (controlKeys[KEY_LEFT] ? 1 : 0) << endl;
-    //cout << "    " << "right:   " << (controlKeys[KEY_RIGHT] ? 1 : 0) << endl;
-    //cout << "    " << "shoot:   " << (controlKeys[KEY_SHOOT] ? 1 : 0) << endl;
-
     float dt = t - t_old;
     t_old = t;
 
@@ -113,25 +101,12 @@ void SpaceShip::update(double t, bool* controlKeys)
     }
 
     // update position
-    pos += v * dt;
-    if (pos.x < -80.0f) {
-        pos.x += 160.0f;
-    }
-    else if (pos.x > 80.0f) {
-        pos.x -= 160.f;
-    }
-    if (pos.z < -45.0f) {
-        pos.z += 90.0f;
-    }
-    else if (pos.z > 45.0f) {
-        pos.z -= 90.0f;
-    }
+    updatePos(dt);
 }
 
 void SpaceShip::fire()
 {
-    cout << "fire()" << endl;
-    shared_ptr<Projectile> proj = make_shared<Projectile>(prog, DATA_DIR, pos, dir, t_old, projSpeed);
+    shared_ptr<Projectile> proj = make_shared<Projectile>(prog, DATA_DIR, pos, dir, t_old);
 
     scene->addProjectile(proj);
 }

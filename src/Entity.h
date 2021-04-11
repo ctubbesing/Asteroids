@@ -23,11 +23,11 @@ public:
     Entity(std::shared_ptr<Program> prog_, std::string& _DATA_DIR, glm::vec3 pos_, float dir_, glm::vec3 v_, float rotSpeed_, double t_old_);
     virtual ~Entity();
 
-    void setScene(std::shared_ptr<Scene> _scene);
+    void setScene(std::shared_ptr<Scene> scene_) { scene = scene_; }
 
-    void kill();
+    bool inBounds();
 
-    void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
+    virtual void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
 protected:
     glm::vec3 pos;
@@ -37,9 +37,13 @@ protected:
 
     double t_old;
 
+    bool doWrap; // wrap around edges
+
     std::shared_ptr<Scene> scene;
     std::shared_ptr<Program> prog;
     std::string DATA_DIR;
+
+    void updatePos(float dt);
 };
 
 #endif

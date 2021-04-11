@@ -21,7 +21,6 @@ public:
     SpaceShip(std::shared_ptr<Scene> _scene, std::shared_ptr<Program> prog_, std::string& DATA_DIR_, double t);
     virtual ~SpaceShip();
 
-    //void init(std::shared_ptr<Program> progShapes, std::string DATA_DIR);
     void update(double t, bool* controlKeys);
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
@@ -37,24 +36,17 @@ public:
 private:
     float vMax;
     float a;
-    float drag;     // speed lost per second
-
-    //glm::vec3 pos;
-    //float dir;
-    //glm::vec3 v;
-    //float rotSpeed; // seconds per rotation
-    //double t_old;
+    float drag; // speed lost per second
 
     bool thrustersOn;
     bool triggerPressed;
     float cooldownDuration;
     float timeLeft;
-    float projSpeed;
-
-    void fire();
 
     std::shared_ptr<Shape> body;
     std::shared_ptr<Shape> fin;
+
+    void fire();
 };
 
 #endif

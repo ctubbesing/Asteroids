@@ -20,7 +20,8 @@ Entity::Entity(shared_ptr<Program> prog_, string& DATA_DIR_, glm::vec3 pos_, flo
     dir(dir_),
     v(v_),
     rotSpeed(rotSpeed_),
-    t_old(t_old_)
+    t_old(t_old_),
+    doWrap(true)
 {
 
 }
@@ -30,17 +31,32 @@ Entity::~Entity()
 
 }
 
-void Entity::setScene(shared_ptr<Scene> _scene)
+bool Entity::inBounds()
 {
-    scene = _scene;
-}
-
-void Entity::kill()
-{
-
+    return (pos.x > -80.0f && pos.x < 80.0f && pos.z > -45.0f && pos.z < 45.0f);
 }
 
 void Entity::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
 {
 
+}
+
+void Entity::updatePos(float dt)
+{
+    pos += v * dt;
+
+    if (doWrap) {
+        if (pos.x < -80.0f) {
+            pos.x += 160.0f;
+        }
+        else if (pos.x > 80.0f) {
+            pos.x -= 160.f;
+        }
+        if (pos.z < -45.0f) {
+            pos.z += 90.0f;
+        }
+        else if (pos.z > 45.0f) {
+            pos.z -= 90.0f;
+        }
+    }
 }

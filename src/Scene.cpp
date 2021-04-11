@@ -33,7 +33,6 @@ void Scene::update(double t, bool* controlKeys)
     // update projectiles
     while (projectiles.size() > 0 && !projectiles.front()->isAlive()) {
         projectiles.pop_front();
-        cout << "pop projectile" << endl;
     }
 
     for (auto p : projectiles) {
@@ -57,7 +56,9 @@ void Scene::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV
     // draw projectiles
     MV->pushMatrix();
     for (shared_ptr<Projectile> p : projectiles) {
-        p->draw(P, MV, t);
+        if (p->inBounds()) {
+            p->draw(P, MV, t);
+        }
     }
     MV->popMatrix();
 
