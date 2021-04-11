@@ -21,15 +21,15 @@ float randFloat(float l, float h)
 }
 
 SpaceShip::SpaceShip(shared_ptr<Scene> _scene, shared_ptr<Program> prog_, string& DATA_DIR_, double t) :
-    Entity(prog_, DATA_DIR_, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f, t),//////////////////////t_old? // rotSpeed = 2*pi / secsPerRotation
+    Entity(prog_, DATA_DIR_, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f, t), // rotSpeed = 2*pi / secsPerRotation
     vMax(1000.0f),
-    a(50.0f),//15.0f),
+    a(50.0f),
     drag(1.0f),
-    //t_old(0.0),
     thrustersOn(false),
     triggerPressed(false),
-    cooldownDuration(1.0f),
-    timeLeft(0.0f)
+    cooldownDuration(0.5f),
+    timeLeft(0.0f),
+    projSpeed(100.0f) // maybe just put this in the Projectile constructor
 {
     setScene(_scene);
 
@@ -131,7 +131,7 @@ void SpaceShip::update(double t, bool* controlKeys)
 void SpaceShip::fire()
 {
     cout << "fire()" << endl;
-    shared_ptr<Projectile> proj = make_shared<Projectile>(prog, DATA_DIR, pos, dir, v, t_old);
+    shared_ptr<Projectile> proj = make_shared<Projectile>(prog, DATA_DIR, pos, dir, t_old, projSpeed);
 
     scene->addProjectile(proj);
 }

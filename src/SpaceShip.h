@@ -49,6 +49,7 @@ private:
     bool triggerPressed;
     float cooldownDuration;
     float timeLeft;
+    float projSpeed;
 
     void fire();
 
