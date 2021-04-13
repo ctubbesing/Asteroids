@@ -225,6 +225,7 @@ void render()
     // get current frame buffer size
     int width, height;
     glfwGetFramebufferSize(window, &width, &height);
+    if (width == 0 || height == 0) return;
     glViewport(0, 0, width, height);
 
     // use the window size for camera //////////////////////////////////TODO auto-zoom camera to fit screen width
