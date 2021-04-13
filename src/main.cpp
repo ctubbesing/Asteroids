@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <time.h>
 
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -23,6 +24,7 @@
 #include "Scene.h"
 #include "Entity.h"
 #include "SpaceShip.h"
+#include "Asteroid.h"
 
 using namespace std;
 
@@ -49,6 +51,7 @@ shared_ptr<Scene> scene = NULL;
 shared_ptr<Shape> shape = NULL;
 shared_ptr<Shape> shape1 = NULL;
 shared_ptr<Shape> shape2 = NULL;
+shared_ptr<Asteroid> ast = NULL;
 double t, t0;
 double tMult = 1.0;
 
@@ -140,6 +143,8 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 
 static void init()
 {
+    srand(time(0));
+
     keyToggles[(unsigned)'c'] = true;
 
     camera = make_shared<Camera>();
@@ -190,6 +195,9 @@ static void init()
     shape2->setProgram(progShapes);
     shape2->scale(1.0f);
     shape2->init();
+
+    ast = make_shared<Asteroid>(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(5.0f, 0.0f, -3.0f), t, 1);
+    //ast = make_shared<Asteroid>(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(0.0f), t, 1);
 
     // initialize scene
     scene = make_shared<Scene>();
@@ -335,6 +343,15 @@ void render()
 
     progSimple->unbind();
 
+    //*/ draw asteroid
+    //Asteroid ast(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(0.0f), t, 1);
+
+    progShapes->bind();
+    ast->update(t);
+    ast->draw(P, MV, t);
+    progShapes->unbind();
+    //*/
+    
     /*/ draw sample shapes
     progShapes->bind();
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
