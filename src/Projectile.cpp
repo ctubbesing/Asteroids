@@ -58,7 +58,7 @@ void Projectile::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStac
     MV->pushMatrix();
 
     float sinDir = sin(dir);
-    float cosDir = cos(dir);
+    float cosDir = cos(dir); ///////////////////////////////////////// this doesn't do anything rn jsyk
     MV->translate(pos);
     //MV->translate(-1.5f * sinDir, 0.0f, -1.5f * cosDir); // maybe do this in constructor
     MV->rotate(5 * t, sin(dir), 0.0f, cos(dir));

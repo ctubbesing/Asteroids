@@ -2,7 +2,6 @@
 #ifndef SPACESHIP_H
 #define SPACESHIP_H
 
-#include <memory>
 #include <string>
 
 #include <glm/glm.hpp>

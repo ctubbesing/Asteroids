@@ -44,6 +44,7 @@ protected:
     std::string DATA_DIR;
 
     void updatePos(float dt);
+    float randFloat(float l = 0.0f, float h = 1.0f);
 };
 
 #endif

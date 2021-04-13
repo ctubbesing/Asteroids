@@ -2,7 +2,6 @@
 #ifndef PROJECTILE_H
 #define PROJECTILE_H
 
-//#include <memory>
 #include <string>
 
 #include <glm/glm.hpp>

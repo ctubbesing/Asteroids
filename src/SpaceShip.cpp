@@ -14,12 +14,6 @@
 
 using namespace std;
 
-float randFloat(float l, float h)
-{
-    float r = rand() / (float)RAND_MAX;
-    return (1.0f - r) * l + r * h;
-}
-
 SpaceShip::SpaceShip(shared_ptr<Scene> _scene, shared_ptr<Program> prog_, string& DATA_DIR_, double t) :
     Entity(prog_, DATA_DIR_, glm::vec3(0.0f), 0.0f, glm::vec3(0.0f), 2*M_PI / 2.0f, t), // rotSpeed = 2*pi / secsPerRotation
     vMax(1000.0f),
