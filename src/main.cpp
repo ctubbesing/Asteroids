@@ -143,7 +143,7 @@ void mouse_button_callback(GLFWwindow *window, int button, int action, int mods)
 
 static void init()
 {
-    srand(time(0));
+    srand(time(NULL));
 
     keyToggles[(unsigned)'c'] = true;
 
@@ -179,7 +179,7 @@ static void init()
     shape->loadMesh(DATA_DIR + "spaceship.obj");
     shape->refreshNormals();
     shape->setProgram(progShapes);
-    shape->scale(1.0f);
+    shape->scale(1.0f + rand());
     shape->init();
 
     shape1 = make_shared<Shape>();
@@ -196,6 +196,7 @@ static void init()
     shape2->scale(1.0f);
     shape2->init();
 
+    
     ast = make_shared<Asteroid>(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(5.0f, 0.0f, -3.0f), t, 1);
     //ast = make_shared<Asteroid>(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(0.0f), t, 1);
 
@@ -343,7 +344,7 @@ void render()
 
     progSimple->unbind();
 
-    //*/ draw asteroid
+    /*/ draw asteroid
     //Asteroid ast(progShapes, DATA_DIR, glm::vec3(0.0f), glm::vec3(0.0f), t, 1);
 
     progShapes->bind();
@@ -351,7 +352,7 @@ void render()
     ast->draw(P, MV, t);
     progShapes->unbind();
     //*/
-    
+
     /*/ draw sample shapes
     progShapes->bind();
     glUniform3f(progShapes->getUniform("kd"), 0.2f, 0.6f, 0.5f);
