@@ -16,13 +16,18 @@ Asteroid::Asteroid(std::shared_ptr<Program> prog_, std::string& DATA_DIR_, glm::
     axis(glm::normalize(glm::vec3(randFloat(), randFloat(), randFloat()))),
     color(glm::vec3(randFloat(0.5f, 0.7f), randFloat(0.4f, 0.5f), randFloat(0.6f, 0.7f)))
 {
+    float sizeModifier = 1.8f;
+    r = size * sizeModifier;
+
     // initialize shape
     shape = make_shared<Shape>();
     shape->loadMesh(DATA_DIR + "sphere2.obj");
     shape->refreshNormals();
     shape->setProgram(prog);
-    shape->scale(2.0f);///////////////////// scale this to size 1 asteroid
+    shape->scale(r);///////////////////// scale this to size 1 asteroid
     shape->init();
+
+    cout << "asteroid rotSpeed = " << rotSpeed << endl;
 }
 
 Asteroid::~Asteroid()
@@ -44,14 +49,29 @@ void Asteroid::update(double t)
     updatePos(dt);
 }
 
-bool Asteroid::isCollision(glm::vec3 p)
-{
-    return false;
-}
+//bool Asteroid::isCollision(glm::vec3 p)
+//{
+//    return false;
+//}
 
 void Asteroid::explode()
 {
 
+}
+
+glm::vec3 Asteroid::getPos()
+{
+    return pos;
+}
+
+glm::vec3 Asteroid::getV()
+{
+    return v;
+}
+
+int Asteroid::getSize()
+{
+    return size;
 }
 
 void Asteroid::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)

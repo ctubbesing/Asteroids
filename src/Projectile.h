@@ -21,6 +21,7 @@ public:
 
     void update(double t);
     bool isAlive();
+    glm::vec3 getPos();
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 

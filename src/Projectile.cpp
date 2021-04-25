@@ -17,6 +17,7 @@ Projectile::Projectile(std::shared_ptr<Program> prog_, std::string& DATA_DIR_, g
     lifespan(80.0f / speed) // units traveled / speed
 {
     v = glm::vec3(sin(dir) * speed, 0.0f, cos(dir) * speed); // + v;
+    r = 0.75f;
 
     doWrap = false;
 
@@ -49,6 +50,11 @@ void Projectile::update(double t)
 bool Projectile::isAlive()
 {
     return (age < lifespan);
+}
+
+glm::vec3 Projectile::getPos()
+{
+    return pos;
 }
 
 void Projectile::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)

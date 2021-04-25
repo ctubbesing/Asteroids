@@ -21,8 +21,12 @@ public:
 
     void update(double t);
 
-    bool isCollision(glm::vec3 p);
+    //bool isCollision(glm::vec3 p);
     void explode();
+
+    glm::vec3 getPos();
+    glm::vec3 getV();
+    int getSize();
 
     void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 

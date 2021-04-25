@@ -36,6 +36,11 @@ bool Entity::inBounds()
     return (pos.x > -80.0f && pos.x < 80.0f && pos.z > -45.0f && pos.z < 45.0f);
 }
 
+bool Entity::isCollision(glm::vec3 p, float otherR)
+{
+    return (glm::length(pos - p) < (r + otherR));
+}
+
 void Entity::draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t)
 {
 
@@ -64,5 +69,5 @@ void Entity::updatePos(float dt)
 float Entity::randFloat(float l, float h)
 {
     float r = rand() / (float)RAND_MAX;
-    return (1.0f - r) * l + r * h;
+    return ((1.0f - r) * l + r * h);
 }

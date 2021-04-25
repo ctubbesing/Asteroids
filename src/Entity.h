@@ -26,6 +26,7 @@ public:
     void setScene(std::shared_ptr<Scene> scene_) { scene = scene_; }
 
     bool inBounds();
+    bool isCollision(glm::vec3 p, float otherR = 0.0f);
 
     virtual void draw(std::shared_ptr<MatrixStack> P, std::shared_ptr<MatrixStack> MV, double t);
 
@@ -34,6 +35,7 @@ protected:
     float dir;
     glm::vec3 v;
     float rotSpeed; // seconds per rotation
+    float r;
 
     double t_old;
 

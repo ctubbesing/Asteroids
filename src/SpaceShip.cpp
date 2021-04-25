@@ -26,6 +26,8 @@ SpaceShip::SpaceShip(shared_ptr<Scene> _scene, shared_ptr<Program> prog_, string
 {
     setScene(_scene);
 
+    r = 2.5f;
+
     // initialize body & fins
     body = make_shared<Shape>();
     body->loadMesh(DATA_DIR + "spaceship_body.obj");
